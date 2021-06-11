@@ -15,7 +15,9 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity(), SingleTextViewClickListener {
+
     private var players = ArrayList<String>()
+    private lateinit var setId: String
 
     private lateinit var adapter: SingleTextViewAdapter
     private lateinit var playerNameEditText: EditText
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity(), SingleTextViewClickListener {
 
     fun onAddToListClick(view: View?) {
         val intent = Intent(applicationContext, AddActivity::class.java)
+        intent.putExtra("set_id", setId)
         startActivity(intent)
     }
 
@@ -47,6 +50,9 @@ class MainActivity : AppCompatActivity(), SingleTextViewClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        setId = intent.getStringExtra("set_id")!!
+
         constraintLayout = findViewById(R.id.constraintLayout)
         playerNameEditText = findViewById(R.id.playerNameEditText)
         recyclerView = findViewById(R.id.recyclerView)

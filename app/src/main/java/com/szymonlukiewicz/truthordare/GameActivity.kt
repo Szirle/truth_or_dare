@@ -35,8 +35,6 @@ class GameActivity : AppCompatActivity() {
     private lateinit var questionTextView: TextView
     private lateinit var alertDialog: AlertDialog
 
-    private var truthsDatabaseHelper: TruthsDatabaseHelper? = null
-    private var daresDatabaseHelper: DaresDatabaseHelper? = null
     private var rotatedDegrees = 0.0
     private var numberOfPlayers: Int? = null
 
@@ -95,8 +93,6 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        truthsDatabaseHelper = TruthsDatabaseHelper(this)
-        daresDatabaseHelper = DaresDatabaseHelper(this)
         bottleImageView = findViewById(R.id.bottleImageView)
         bottleImageView.bringToFront()
 
@@ -105,14 +101,14 @@ class GameActivity : AppCompatActivity() {
         numberOfPlayers = players.size
 
 //      RETRIEVING DATA FROM LOCAL SQL DATABASE
-        val data = truthsDatabaseHelper!!.data
-        while (data.moveToNext()) {
-            truthsArrayList.add(data.getString(1))
-        }
-        val data2 = daresDatabaseHelper!!.data
-        while (data2.moveToNext()) {
-            daresArrayList.add(data2.getString(1))
-        }
+//        val data = truthsDatabaseHelper!!.data
+//        while (data.moveToNext()) {
+//            truthsArrayList.add(data.getString(1))
+//        }
+//        val data2 = daresDatabaseHelper!!.data
+//        while (data2.moveToNext()) {
+//            daresArrayList.add(data2.getString(1))
+//        }
         setupChart()
     }
 
