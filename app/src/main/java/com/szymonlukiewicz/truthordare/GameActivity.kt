@@ -12,8 +12,10 @@ import android.view.animation.Animation.AnimationListener
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -24,8 +26,8 @@ import kotlin.math.ceil
 
 class GameActivity : AppCompatActivity() {
     var players = ArrayList<String>()
-    private var truthsArrayList = ArrayList<String>()
-    private var daresArrayList = ArrayList<String>()
+    private lateinit var truthsArrayList: ArrayList<String>
+    private lateinit var daresArrayList: ArrayList<String>
 
     private lateinit var bottleImageView: ImageView
     private lateinit var truthCardView: CardView
@@ -100,15 +102,22 @@ class GameActivity : AppCompatActivity() {
         players = intent.getSerializableExtra("players") as ArrayList<String>
         numberOfPlayers = players.size
 
-//      RETRIEVING DATA FROM LOCAL SQL DATABASE
-//        val data = truthsDatabaseHelper!!.data
-//        while (data.moveToNext()) {
-//            truthsArrayList.add(data.getString(1))
-//        }
-//        val data2 = daresDatabaseHelper!!.data
-//        while (data2.moveToNext()) {
-//            daresArrayList.add(data2.getString(1))
-//        }
+        val viewModel = ViewModelProvider(this).get(GameActivityViewModel::class.java)
+        viewModel.initViewResponse.observe(this, { initDataState ->
+            if(initDataState.isInProgress) {
+
+            }else if(initDataState.showError){
+                if(initDataState.error!! == "empty list"){
+                    Toast.makeText(this, getString(R.string.empty_list_error_message), Toast.LENGTH_LONG).show()
+                }
+                onBackPressed()
+            }else{
+                truthsArrayList = initDataState.setData!!.truths_list!!
+                daresArrayList = initDataState.setData!!.dares_list!!
+            }
+        })
+        viewModel.getInitData(setID = intent.getStringExtra("set_id")!!, this)
+
         setupChart()
     }
 

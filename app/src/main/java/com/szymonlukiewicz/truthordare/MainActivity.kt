@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.transition.TransitionManager
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.szymonlukiewicz.truthordare.SingleTextViewAdapter.SingleTextViewClickListener
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity(), SingleTextViewClickListener {
@@ -29,20 +31,27 @@ class MainActivity : AppCompatActivity(), SingleTextViewClickListener {
 
 
     fun onAddPlayerClick(view: View?) {
-        players.add(playerNameEditText.text.toString())
-        playerNameEditText.setText("")
-        adapter.loadData(players)
+        if(playerNameEditText.text.toString().isNotEmpty()){
+            players.add(playerNameEditText.text.toString())
+            playerNameEditText.setText("")
+            adapter.loadData(players)
+        }else{
+            Toast.makeText(this, getString(R.string.empty_edit_text_error_message), Toast.LENGTH_LONG).show()
+        }
     }
 
     fun onStartTheGameClick(view: View?) {
         val intent = Intent(applicationContext, GameActivity::class.java)
         intent.putExtra("players", players)
+        intent.putExtra("set_id", setId)
+        intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
         startActivity(intent)
     }
 
     fun onAddToListClick(view: View?) {
         val intent = Intent(applicationContext, AddActivity::class.java)
         intent.putExtra("set_id", setId)
+        intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
         startActivity(intent)
     }
 
@@ -60,17 +69,17 @@ class MainActivity : AppCompatActivity(), SingleTextViewClickListener {
         keyboardConstraintSet.clone(this, R.layout.activity_main_keyboard_layout)
 
 //      MANAGING KEYBOARD ACTIONS
-        constraintLayout.viewTreeObserver.addOnGlobalLayoutListener {
-            val r = Rect()
-            constraintLayout.getWindowVisibleDisplayFrame(r)
-            val screenHeight = constraintLayout.rootView.height
-            val keypadHeight = screenHeight - r.bottom
-            if (keypadHeight > screenHeight * 0.15) {
-                slideLayoutUp()
-            } else {
-                slideLayoutDown()
-            }
-        }
+//        constraintLayout.viewTreeObserver.addOnGlobalLayoutListener {
+//            val r = Rect()
+//            constraintLayout.getWindowVisibleDisplayFrame(r)
+//            val screenHeight = constraintLayout.rootView.height
+//            val keypadHeight = screenHeight - r.bottom
+//            if (keypadHeight > screenHeight * 0.15) {
+//                slideLayoutUp()
+//            } else {
+//                slideLayoutDown()
+//            }
+//        }
 
         adapter = SingleTextViewAdapter(this, this)
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)

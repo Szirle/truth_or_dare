@@ -32,8 +32,12 @@ class AddActivity : AppCompatActivity(), SingleTextViewWithXAdapter.SingleTextVi
 
 
     fun onAddClick(view: View?){
-        viewModel.addTruthOrDare(displayed, contentEditText.text.toString())
-        contentEdiText.setText("")
+        if(contentEditText.text.toString().isNotEmpty()){
+            viewModel.addTruthOrDare(displayed, contentEditText.text.toString())
+            contentEdiText.setText("")
+        }else{
+            Toast.makeText(this, getString(R.string.empty_edit_text_error_message), Toast.LENGTH_LONG).show()
+        }
     }
 
     fun onTruthClick(view: View?) {
@@ -46,7 +50,7 @@ class AddActivity : AppCompatActivity(), SingleTextViewWithXAdapter.SingleTextVi
                     contentEdiText.hint = getString(R.string.truth)
                     if(truthsList != null){
                         emptyListErrorTextView.visibility = View.INVISIBLE
-                        adapter.loadData(truthsList)
+                        adapter.loadData(truthsList!!)
                         recyclerView.visibility = View.VISIBLE
                     }else{
                         emptyListErrorTextView.visibility = View.VISIBLE
@@ -71,7 +75,7 @@ class AddActivity : AppCompatActivity(), SingleTextViewWithXAdapter.SingleTextVi
                     contentEdiText.hint = (getString(R.string.dare))
                     if(daresList != null){
                         emptyListErrorTextView.visibility = View.INVISIBLE
-                        adapter.loadData(daresList)
+                        adapter.loadData(daresList!!)
                         recyclerView.visibility = View.VISIBLE
                     }else{
                         emptyListErrorTextView.visibility = View.VISIBLE
@@ -140,13 +144,17 @@ class AddActivity : AppCompatActivity(), SingleTextViewWithXAdapter.SingleTextVi
                     recyclerView.adapter = adapter
                     if(displayed == "dares_list"){
                         if(daresList != null){
-                            adapter.loadData(daresList)
+                            adapter.loadData(daresList!!)
+                            recyclerView.visibility = View.VISIBLE
+                            emptyListErrorTextView.visibility = View.INVISIBLE
                         }else{
                             emptyListErrorTextView.visibility = View.VISIBLE
                         }
                     }else{
                         if(truthsList != null){
-                            adapter.loadData(truthsList)
+                            adapter.loadData(truthsList!!)
+                            recyclerView.visibility = View.VISIBLE
+                            emptyListErrorTextView.visibility = View.INVISIBLE
                         }else{
                             emptyListErrorTextView.visibility = View.VISIBLE
                         }

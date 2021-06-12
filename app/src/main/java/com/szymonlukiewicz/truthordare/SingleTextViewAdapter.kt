@@ -12,6 +12,8 @@ import com.szymonlukiewicz.truthordare.SingleTextViewAdapter.SingleTextViewViewH
 
 class SingleTextViewAdapter(private val context: Context, private val singleTextViewClickListener: SingleTextViewClickListener) : RecyclerView.Adapter<SingleTextViewViewHolder>() {
     private var playersList: List<String>? = null
+
+
     fun loadData(playersList: List<String>?) {
         this.playersList = playersList
         notifyDataSetChanged()

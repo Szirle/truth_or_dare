@@ -27,7 +27,12 @@ class SetChoiceActivity : AppCompatActivity(),  SetAdapter.SetClickListener{
 
 
     fun onAddClick(view: View) {
-        viewModel.addSet(setNameEditText.text.toString())
+        if (setNameEditText.text.toString().isNotEmpty()){
+            viewModel.addSet(setNameEditText.text.toString())
+            setNameEditText.setText("")
+        }else{
+            Toast.makeText(this, getString(R.string.empty_edit_text_error_message), Toast.LENGTH_LONG).show()
+        }
     }
 
 
@@ -56,12 +61,13 @@ class SetChoiceActivity : AppCompatActivity(),  SetAdapter.SetClickListener{
                     }
                 } else {
                     hideProgressBar()
+                    setListErrorTextView.visibility = View.INVISIBLE
                     setList = initDataState.setDataList!!
                     adapter = SetAdapter(this, this)
                     val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
                     recyclerView.layoutManager = layoutManager
                     recyclerView.adapter = adapter
-                    adapter.loadData(setList)
+                    adapter.loadData(ArrayList(setList))
                 }
             }
         })

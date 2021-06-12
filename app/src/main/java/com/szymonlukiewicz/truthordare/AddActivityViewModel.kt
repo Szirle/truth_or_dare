@@ -49,7 +49,7 @@ class AddActivityViewModel : ViewModel() {
         )
 
         val showError:Boolean
-        var contentsList = if (column == "dares_list"){
+        val contentsList = if (column == "dares_list"){
             currentSet.dares_list
         }else{
             currentSet.truths_list

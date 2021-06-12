@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.szymonlukiewicz.truthordare.SetAdapter.SetViewHolder
 
 class SetAdapter(private val context: Context, private val setClickListener: SetClickListener) : RecyclerView.Adapter<SetViewHolder>() {
-    private var setList: List<SetChoiceActivityViewModel.SetData>? = null
+    private lateinit var setList: ArrayList<SetChoiceActivityViewModel.SetData>
 
 
-    fun loadData(playersList: List<SetChoiceActivityViewModel.SetData>?) {
+    fun loadData(playersList: ArrayList<SetChoiceActivityViewModel.SetData>) {
         this.setList = playersList
         notifyDataSetChanged()
     }
@@ -27,7 +27,7 @@ class SetAdapter(private val context: Context, private val setClickListener: Set
     }
 
     override fun onBindViewHolder(holder: SetViewHolder, position: Int) {
-        val set = setList!![position]
+        val set = setList[position]
         holder.nameTextView.text = set.set_name
 
         val daresCount = if(set.dares_list == null){
@@ -46,11 +46,7 @@ class SetAdapter(private val context: Context, private val setClickListener: Set
     }
 
     override fun getItemCount(): Int {
-        return if (setList == null) {
-            0
-        } else {
-            setList!!.size
-        }
+        return setList.size
     }
 
     inner class SetViewHolder(view: View) : ViewHolder(view), View.OnClickListener {
